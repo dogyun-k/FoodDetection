@@ -1,6 +1,6 @@
-train: /content/drive/MyDrive/food100/data/images
-val: /content/drive/MyDrive/food100/data/images
-test: /content/drive/MyDrive/food100/test/images
+train: C:/Users/kdk12/Desktop/Yolov5/yolov5/dataset
+val: C:/Users/kdk12/Desktop/Yolov5/yolov5/dataset
+
 
 # number of classes
 nc: 100
