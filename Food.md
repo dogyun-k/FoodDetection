@@ -149,7 +149,7 @@ python train.py --img 640 --batch 16 --epochs 5 --data food.yaml --weights yolov
 - img
 - weights : 가중치 파일.
    모델의 확장자는 .pt임
-- data : 학습, 검증 데이터의 경로가 적혀있는 파일 
+- data : 학습, 검증 데이터의 경로 및 분류 클래스가 적혀있는 파일 
 - 
 
 
