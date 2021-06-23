@@ -146,9 +146,10 @@ image1.jpg, label1.txt
 python train.py --img 640 --batch 16 --epochs 5 --data food.yaml --weights yolov5s.pt
 ```
 
-- weights : 사용할 모델 파일.
-- 모델의 확장자는 .pt임
-
+- img
+- weights : 가중치 파일.
+   모델의 확장자는 .pt임
+- data : 학습, 검증 데이터의 경로가 적혀있는 파일 
 - 
 
 
