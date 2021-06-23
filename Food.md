@@ -2,21 +2,15 @@
 
 - 음식데이터로 칼로리 계산
 - 
-
-## 1. 데이터 셋
-
-UED FOOD 100 데이터셋을 사용
-
-> http://foodcam.mobi/dataset100.html
-
-다운받은 zip 파일을 코랩에 업로드
-
-```py
-from google.colab import files
-file_uploaded = files.upload()
-```
-
 ## 욜로 v5 특징
+
+0. 욜로?
+
+   - YOLO는 real time object detection에 사용되는 알고리즘이다.
+
+   - 각 이미지를 S x S 개의 그리드로 분할하고, 각 그리드의 신뢰도를 계산한다.
+
+   - 처음에는 객체와 동떨어진 그리드가 설정되지만, 신뢰도를 계산하여 위치를 조정함으로써 가장 높은 객체인식 정확성을 가지는 그리드를 얻는다.
 
 이미지 하나 당 라벨파일 하나 존재해야함.
 ```
@@ -46,65 +40,130 @@ image1.jpg, label1.txt
 
 
 
-## 실전
+# 실전
 
-### 0. Yolo v5 레포지토리 clone
+## 0. 개발환경
 
-```sh
-git clone https://github.com/ultralytics/yolov5  # clone repo
-
-cd yolov5
-pip install -r requirements.txt  # 필요 패키지 설치
-```
-
-### 1. 데이터셋 만들기
-
-디렉토리 구성
-```
-dataset
-   └ train
-      └ images
-      └ labels
-   └ test
-      └ images
-```
-
-yaml 파일 생성(food.yaml)
-```yaml
-# 데이터셋 경로
-train: /content/drive/MyDrive/dataset/train/images
-val: /content/drive/MyDrive/dataset/train/images
-
-# 클래스 수
-nc: 100
-
-# 클래스 이름
-names: ['rice', 'eels on rice', 'pilaf', "chicken-'n'-egg on rice", ... , 'mixed rice', 'goya chanpuru']
-```
-- yolov5는 각 이미지에 대한 labels 파일들을 자동으로 읽음.
-- 이미지 디렉토리와 같은 경로에 있어야 함. 위의 디렉토리 구성 참조.
+- Google Colabolatory (구글 코랩)
+   ```
+   CPU: Intel Xeon 2.2GHz
+   RAM: 13GB
+   저장공간: 33GB
+   90분간 미사용시 중지
+   최대 12시간 연속 사용 가능
+   ```
+   - 구글 드라이브 마운트하여 데이터 사용
 
 
-labels의 txt 파일 내용
-```
-class x좌표 y좌표 넓이 높이
-```
-- x, y 좌표는 bounded object 중심 좌표
-- 넓이, 높이는 사각형의 넓이, 높이
+- Yolo v5
 
-### 2. 학습하기
+   ```sh
+   !git clone https://github.com/ultralytics/yolov5  # clone repo
+
+   %cd yolov5
+   !pip install -r requirements.txt  # 필요 패키지 설치
+   ```
+   - Yolov5 레포지토리를 클론하여 사용.
+   - Yolov5는 Pytorch 라이브러리를 사용하여 구현된 것으로 이전 버전들보다 개발환경 구축이 편리하다.
+
+
+
+## 1. 데이터셋 만들기
+
+1. 사용한 데이터
+   
+   - UED FOOD 100 데이터셋을 사용
+   - 100개의 클래스가 있고 클래스 당 약 100개의 이미지
+
+2. 데이터 셋 디렉토리 구성
+   ```
+   dataset
+      └ train
+         └ images
+         └ labels
+      └ test
+         └ images
+      train.txt
+      val.txt
+   ```
+   - yolov5는 각 이미지에 대한 labels 파일들을 자동으로 읽어주며 이미지폴더와 같은 경로에 저장해둬야 한다.
+
+3. yaml 파일 생성(food.yaml)
+
+   학습 시 해당 파일을 통해 인풋 데이터를 읽어들인다.
+
+   ```yaml
+   # 데이터셋 경로
+   train: /content/drive/MyDrive/dataset/train.txt
+   val: /content/drive/MyDrive/dataset/val.txt
+
+   # 클래스 수
+   nc: 100
+
+   # 클래스 이름
+   names: ['rice', 'eels on rice', 'pilaf', "chicken-'n'-egg on rice", ... , 'mixed rice', 'goya chanpuru']
+   ```
+
+4. 이미지 라벨링
+
+   - 이미지에 클래스 객체의 위치를 표시한 값
+
+   - labels의 txt 파일 내용
+      ```
+      class x좌표 y좌표 넓이 높이
+      ```
+      - x, y 좌표는 bounded object 중심 좌표
+      - 넓이, 높이는 사각형의 넓이, 높이
+
+5. 데이터 분리
+
+   데이터를 학습데이터와 검증데이터로 분리
+
+   ```py
+
+   from sklearn.model_selection import train_test_split
+
+   train_img_list, val_img_list = train_test_split(img_list, test_size=0.2, random_state=2000)
+   print(len(train_img_list), len(val_img_list))
+   
+   with open('/content/dataset/train.txt', 'w') as f:
+      f.write('\n'.join(train_img_list) + '\n')
+   with open('/content/dataset/val.txt', 'w') as f:
+      f.write('\n'.join(val_img_list) + '\n')
+   ```
+
+   - train_test_split으로 학습데이터 : 검증데이터 = 8 : 2로 나누어 경로를 지정해준다.
+   - txt파일에는 이미지 경로가 저장된다.
+
+
+## 2. 학습하기
 
 욜로에는 다양한 학습 모델이 있다.
 
 ![models](./images/model_comparison.png)
 
 ```sh
-python train.py --img 640 --batch 16 --epochs 5 --data coco128.yaml --weights yolov5s.pt
+python train.py --img 640 --batch 16 --epochs 5 --data food.yaml --weights yolov5s.pt
 ```
 
 - weights : 사용할 모델 파일.
 - 모델의 확장자는 .pt임
-## 한계점
+
+- 
+
+
+## 3. 성능 평가
+
+- F1 curve : 
+
+- PR curve : 
+
+- P curve : 
+
+- R curve : 
+
+
+## 4. 한계점
 
 1. 낮은 학습률
 
@@ -121,16 +180,4 @@ python train.py --img 640 --batch 16 --epochs 5 --data coco128.yaml --weights yo
    1. 로컬에서 학습. 멀티 GPU 모드로 학습을 하거나 좋은 그래픽카드 사용. (코랩에는 멀티GPU를 지원하지 않는다.)
    2. 클래스 수를 줄이기.
    3. 적어진 클래스 수 만큼 데이터 양을 늘려 학습하는 이미지만큼은 정확도를 높인다.
-
-
-## 성능 평가
-
-F1 curve : 
-
-PR curve : 
-
-P curve : 
-
-R curve : 
-
    
