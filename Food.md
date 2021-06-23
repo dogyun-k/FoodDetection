@@ -1,7 +1,7 @@
 # 휴스타 ICT 텀프로젝트
 
 - 음식데이터로 칼로리 계산
-
+- 
 
 ## 1. 데이터 셋
 
@@ -44,3 +44,63 @@ image1.jpg, label1.txt
 위의 데이터셋은 욜로v2 버전 때 쓰던 것인데 (darknet을 이용한) 욜로v5를 쓰면 다크넷을 쓸 필요 없음. 훨씬 간편함.
 
 
+
+
+## 실전
+
+### 0. Yolo v5 레포지토리 clone
+
+```sh
+git clone https://github.com/ultralytics/yolov5  # clone repo
+
+cd yolov5
+pip install -r requirements.txt  # 필요 패키지 설치
+```
+
+### 1. 데이터셋 만들기
+
+디렉토리 구성
+```
+dataset
+   └ train
+      └ images
+      └ labels
+   └ test
+      └ images
+```
+
+yaml 파일 생성(food.yaml)
+```yaml
+# 데이터셋 경로
+train: /content/drive/MyDrive/dataset/train/images
+val: /content/drive/MyDrive/dataset/train/images
+
+# 클래스 수
+nc: 100
+
+# 클래스 이름
+names: ['rice', 'eels on rice', 'pilaf', "chicken-'n'-egg on rice", ... , 'mixed rice', 'goya chanpuru']
+```
+- yolov5는 각 이미지에 대한 labels 파일들을 자동으로 읽음.
+- 이미지 디렉토리와 같은 경로에 있어야 함. 위의 디렉토리 구성 참조.
+
+
+labels의 txt 파일 내용
+```
+class x좌표 y좌표 넓이 높이
+```
+- x, y 좌표는 bounded object 중심 좌표
+- 넓이, 높이는 사각형의 넓이, 높이
+
+### 2. 학습하기
+
+욜로에는 다양한 학습 모델이 있다.
+
+![models](./images/model_comparison.png)
+
+```sh
+python train.py --img 640 --batch 16 --epochs 5 --data coco128.yaml --weights yolov5s.pt
+```
+
+- weights : 사용할 모델 파일.
+- 모델의 확장자는 .pt임
