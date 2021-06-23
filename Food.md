@@ -154,13 +154,12 @@ python train.py --img 640 --batch 16 --epochs 5 --data food.yaml --weights yolov
 
 ## 3. 성능 평가
 
-- F1 curve : 
+- F1 curve : F1 score는 Precision과 Recall의 조화평균.(데이터 label이 불균형 구조일 때, 모델의 성능을 정확하게 평가할 수 있으며, 성능을 하나의 숫자로 표현할 수 있음)
 
-- PR curve : 
+- PR curve : P curve와 R curve를 합친 것
 
-- P curve : 
-
-- R curve : 
+- P curve : 정밀도란 모델이 True라고 분류한 것 중에서 실제 True인 것의 비율(정밀도란 모델이 True라고 분류한 것 중에서 실제 True인 것의 비율)
+- R curve : 재현율이란 실제 True인 것 중에서 모델이 True라고 예측한 것의 비율
 
 
 ## 4. 한계점
