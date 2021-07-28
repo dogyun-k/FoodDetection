@@ -5,8 +5,8 @@ from bs4 import BeautifulSoup as bs
 def get_translate(text):
     text = text.capitalize()
 
-    client_id = "RdYkXsVY_QfOOvVwX5vG" # <-- client_id 기입
-    client_secret = "noPzgToDOJ" # <-- client_secret 기입
+    client_id = "" # <-- client_id 기입
+    client_secret = "" # <-- client_secret 기입
 
     data = {'text' : text,
             'source' : 'en',
