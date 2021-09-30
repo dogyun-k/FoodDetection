@@ -1,8 +1,15 @@
+import os
+import sys
+
+# Server 디렉토리 파일 경로에 추가
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
+import urllib.request
+
+import config
 from flask import Flask
 from flask_migrate import Migrate, migrate
 from flask_sqlalchemy import SQLAlchemy
-
-import config
 
 db = SQLAlchemy()
 migrate = Migrate()

@@ -1,46 +1,48 @@
 import cv2
-import torch
 import requests
-import search_calorie as sc
+import torch
+import json
+
 from bs4 import BeautifulSoup as bs
 
-
-# img
-img_PATH = 'IMAGE_PATH'
+import search_calorie as sc
 
 
-# Model Load
-model = torch.hub.load('YOLOv5_PATH', 'custom', path='WEIGHT_PATH', source='local')  # local repo
+def detect_food():
+    # img
+    img_PATH = 'IMAGE_PATH'
 
+    # Model Load('Yolov5 경로', 'custom = 커스텀 모델임', path='모델 가중치파일 경로', source='local' 로컬에 저장된 것임)
+    model = torch.hub.load('./models/yolo.py', 'custom', path='WEIGHT_PATH', source='local')  # local repo
 
-# Images load
-img = cv2.imread(img_PATH)[:, :, ::-1]  # OpenCV image (BGR to RGB)
-imgs = [img]  # batch of images
+    # Images load
+    img = cv2.imread(img_PATH)[:, :, ::-1]  # OpenCV image (BGR to RGB)
+    imgs = [img]  # batch of images
 
+    # Inference
+    results = model(imgs, size=640)  # includes NMS
 
-# Inference
-results = model(imgs, size=640)  # includes NMS
+    # Results
+    # results.print()
+    # results.save()  # or .show()
 
+    df = results.pandas().xyxy[0]
+    food_name = list(df['name'])[0]
+    food_name = sc.get_translate(food_name)
+    # print(food_name)
 
-# Results
-# results.print()  
-# results.save()  # or .show()
+    target_url = f'https://www.dietshin.com/calorie/calorie_search.asp?keyword={food_name}'
+    response = requests.get(target_url)
 
-df = results.pandas().xyxy[0]
-food_name = list(df['name'])[0]
-food_name = sc.get_translate(food_name)
-# print(food_name)
+    if response.status_code == 200:
+        html = response.text
+        soup = bs(html, 'html.parser')
 
-target_url = f'https://www.dietshin.com/calorie/calorie_search.asp?keyword={food_name}'
+        # 검색결과 최상단 결과 가져오기
+        calorie = soup.select_one('#container > div.contents.calorieDc > table > tbody > tr:nth-of-type(1) > td:nth-of-type(2)')
 
-response = requests.get(target_url)
+        calorie_info = {food_name: str(calorie)[4:-5]}
 
-if response.status_code == 200:
-    html = response.text
-    soup = bs(html, 'html.parser')
-    
-    # 검색결과 최상단 결과 가져오기
-    calorie = soup.select_one('#container > div.contents.calorieDc > table > tbody > tr:nth-of-type(1) > td:nth-of-type(2)')
-    print(food_name, str(calorie)[4:-5])
-else:
-    print(response.status_code)
+        return json.dumps(calorie_info)
+    else:
+        return response.status_code
