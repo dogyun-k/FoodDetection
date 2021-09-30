@@ -12,8 +12,7 @@ def detect_food():
     img_PATH = 'IMAGE_PATH'
 
     # Model Load('Yolov5 경로', 'custom = 커스텀 모델임', path='모델 가중치파일 경로', source='local' 로컬에 저장된 것임)
-    model = torch.hub.load('./models/yolo.py', 'custom',
-                           path='WEIGHT_PATH', source='local')  # local repo
+    model = torch.hub.load('./models/yolo.py', 'custom', path='WEIGHT_PATH', source='local')  # local repo
 
     # Images load
     img = cv2.imread(img_PATH)[:, :, ::-1]  # OpenCV image (BGR to RGB)
@@ -40,8 +39,10 @@ foods_name = list(df['name'])
 dic = {}
 
 for food in foods_name:
+    
     food_name = sc.get_translate(food_name)
     # print(food_name)
+    
     if "food_name" in dic:
         dic["food_name"].append(food_name)
     else:
@@ -56,8 +57,7 @@ for food in foods_name:
         soup = bs(html, 'html.parser')
 
         # 검색결과 최상단 결과 가져오기
-        calorie = soup.select_one(
-            '#container > div.contents.calorieDc > table > tbody > tr:nth-of-type(1) > td:nth-of-type(2)')
+        calorie = soup.select_one('#container > div.contents.calorieDc > table > tbody > tr:nth-of-type(1) > td:nth-of-type(2)')
         print(food_name, str(calorie)[4:-5])
         cal = (str(calorie)[4:-5])
 
