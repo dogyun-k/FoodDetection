@@ -1,4 +1,5 @@
 import io
+import os
 import json
 
 import requests
@@ -8,14 +9,14 @@ from PIL import Image
 
 from yolov5 import search_calorie as sc
 
+cur_path = os.getcwd()
 
 def prediction(img_file):
 
     img_bytes = img_file.read()
     img = Image.open(io.BytesIO(img_bytes))
 
-    model = torch.hub.load('ultralytics/yolov5', 'custom',
-                           path='../yolov5/weights/best_model.pt')
+    model = torch.hub.load('ultralytics/yolov5', 'custom', path=cur_path + '/weights/best.pt')
 
     results = model(img, size=640)
 
@@ -44,7 +45,7 @@ def prediction(img_file):
             calorie = soup.select_one(
                 '#container > div.contents.calorieDc > table > tbody > tr:nth-of-type(1) > td:nth-of-type(2)')
             # print(food_name, int(str(calorie)[4:-5]))
-            cal = int(str(calorie)[4:-9])
+            cal = str(calorie)[4:-5]
 
         else:
             # print(response.status_code)

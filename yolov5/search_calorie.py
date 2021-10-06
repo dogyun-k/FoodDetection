@@ -2,13 +2,14 @@ import requests
 from bs4 import BeautifulSoup as bs
 
 # 파파고 API
-
+f = open('secret.txt', 'r')
+key = f.read().split('\n')
 
 def get_translate(text):
     text = text.capitalize()
 
-    client_id = ""  # <-- client_id 기입
-    client_secret = ""  # <-- client_secret 기입
+    client_id = key[0]  # <-- client_id 기입
+    client_secret = key[1]  # <-- client_secret 기입
 
     data = {'text': text,
             'source': 'en',
@@ -72,8 +73,7 @@ if response.status_code == 200:
     soup = bs(html, 'html.parser')
 
     # 검색결과 최상단 결과 가져오기
-    calorie = soup.select_one(
-        '#container > div.contents.calorieDc > table > tbody > tr:nth-child(1) > td:nth-child(2)')
-    print(food_name, int(str(calorie)[4:-9]))
+    calorie = soup.select_one('#container > div.contents.calorieDc > table > tbody > tr:nth-child(1) > td:nth-child(2)')
+    print(food_name, str(calorie)[4:-5])
 else:
     print(response.status_code)
