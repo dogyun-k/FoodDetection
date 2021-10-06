@@ -134,6 +134,6 @@
 
 	- 이미지 검출 시간 줄이기 : Yolo v5 모델 개선
 	
-	- 네트워크 시간 줄이기 : API로직 개선. 현재 API호출을 위해 사용하는 동기식 호출 방식인 RestTemplate를 비동기식인 WebClient로 마이그레이션.
+- API로직 개선 : 현재 API호출을 위해 사용하는 동기식 호출 방식인 RestTemplate를 비동기식인 WebClient로 마이그레이션.
 
 - AWS로 호스팅
