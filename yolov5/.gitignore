@@ -1,5 +1,5 @@
 # API Key
-secret.txt
+../Server/secret.txt
 
 # Repo-specific GitIgnore ----------------------------------------------------------------------------------------------
 *.jpg
