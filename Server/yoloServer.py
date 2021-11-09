@@ -1,5 +1,4 @@
-import json
-
+import base64
 import get_calorie
 from flask import Flask, request
 
@@ -15,16 +14,19 @@ def test():
 @app.route('/calorie', methods=['POST'])
 def calorie():
     if request.method == "POST":
-
         filename = request.json['filename'][0]
-        img = request.json['image'][0]
+        img_binary_string = request.json['image'][0]
 
-        print(filename, img)
-        # stored_path = './img/' + filename
-        # img.save(stored_path)
-        #
-        # response = get_calorie.get_calories_in_img(stored_path)
-        # return response
+        # 파일 인코딩
+        stored_path = './img/' + filename
+        img_data = base64.b64decode(img_binary_string)
+        f = open(stored_path, 'wb')
+        f.write(img_data)
+        f.close()
+
+        response = get_calorie.in_img(stored_path)
+        print(type(response), response)
+        return response
 
     return None
 

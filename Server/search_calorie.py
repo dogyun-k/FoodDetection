@@ -42,9 +42,10 @@ def search_by_foodname(food_name):
         soup = bs(html, 'html.parser')
 
         # 검색결과 최상단 결과 가져오기
-        calorie = soup.select_one(
-            '#container > div.contents.calorieDc > table > tbody > tr:nth-child(1) > td:nth-child(2)')
+        calorie = soup.select_one('#container > div.contents.calorieDc > table > tbody > tr:nth-child(1) > td:nth-child(2)')
         calorie = str(calorie)[4:-5]
+        if calorie:
+            calorie = calorie[:calorie.index(' ')]
         return calorie
     else:
         return response.status_code
