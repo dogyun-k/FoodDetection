@@ -11,8 +11,7 @@ def in_img(img_file_path):
         calorie_list['foodname'].append(food)
         calorie_list['calorie'].append(sc.search_by_foodname(food))
 
-    name_cal = json.dumps(calorie_list, ensure_ascii=False)
-
+    name_cal = json.dumps(calorie_list)
     return name_cal
 
 # print(get_calories_in_img('../Server/rice.jpg'))

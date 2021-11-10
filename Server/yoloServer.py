@@ -1,6 +1,6 @@
 import base64
 import get_calorie
-from flask import Flask, request
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
@@ -8,7 +8,6 @@ app = Flask(__name__)
 @app.route('/test', methods=['GET'])
 def test():
     return 'hello'
-    # return response
 
 
 @app.route('/calorie', methods=['POST'])
@@ -25,8 +24,8 @@ def calorie():
         f.close()
 
         response = get_calorie.in_img(stored_path)
-        print(type(response), response)
-        return response
+        print(type(jsonify(response)))
+        return jsonify(response)
 
     return None
 
