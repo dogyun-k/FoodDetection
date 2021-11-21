@@ -1,5 +1,10 @@
+import os
+import sys
 import json
-from Server import search_calorie as sc
+import search_calorie as sc
+
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
 from yolov5 import detect
 
 
