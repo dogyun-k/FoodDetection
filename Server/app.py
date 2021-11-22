@@ -19,12 +19,15 @@ def calorie():
         # 파일 인코딩
         stored_path = './img/' + filename
         img_data = base64.b64decode(img_binary_string)
+
         f = open(stored_path, 'wb')
         f.write(img_data)
         f.close()
 
         response = get_calorie.in_img(stored_path)
         print(type(jsonify(response)))
+        print(jsonify(response))
+
         return jsonify(response)
 
     return None
