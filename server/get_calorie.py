@@ -1,8 +1,9 @@
+import os
 import sys
-
+import json
 import search_calorie as sc
 
-sys.path.append('../yolov5')
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 from yolov5 import detect
 
@@ -17,5 +18,5 @@ def in_img(img_file_path):
 
     return calorie_list
 
-# print(get_calories_in_img('../server/rice.jpg'))
-# print(detect.run(weights='../yolov5/weights/best_model.pt', source='../server/rice.jpg', nosave=True))
+# print(get_calories_in_img('../Server/rice.jpg'))
+# print(detect.run(weights='../yolov5/weights/best_model.pt', source='../Server/rice.jpg', nosave=True))

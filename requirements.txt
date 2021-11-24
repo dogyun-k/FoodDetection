@@ -34,3 +34,8 @@ pandas
 # Cython  # for pycocotools https://github.com/cocodataset/cocoapi/issues/172
 # pycocotools>=2.0  # COCO mAP
 thop  # FLOPs computation
+
+# server
+flask
+beautifulsoup4
+requests
