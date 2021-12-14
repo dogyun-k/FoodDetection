@@ -45,8 +45,8 @@ $ pip install -r requirements.txt
 **Response**
 ```json
 {
-  "name": [a, b, c, ...],
-  "calorie: [1, 2, 3, ...]
+  "name": ["apple", "banana", "candy", ...],
+  "calorie: [100, 100, 30, ...]
 {
 ```
 
