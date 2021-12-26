@@ -1,17 +1,12 @@
 import base64
-import get_calorie
+import get_food
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
 
-@app.route('/test', methods=['GET'])
-def test():
-    return 'hello'
-
-
-@app.route('/calorie', methods=['POST'])
-def calorie():
+@app.route('/calorie/binary', methods=['POST'])
+def calorie_with_binary():
     if request.method == "POST":
         filename = request.json['filename'][0]
         img_binary_string = request.json['image'][0]
@@ -24,12 +19,7 @@ def calorie():
         f.write(img_data)
         f.close()
 
-        response = get_calorie.in_img(stored_path)
-
-        # print(response)
-
-        print(type(jsonify(response)))
-        print(jsonify(response))
+        response = get_food.in_img(stored_path)
 
         return jsonify(response)
 
