@@ -17,7 +17,7 @@ def calorie():
         img_binary_string = request.json['image'][0]
 
         # 파일 인코딩
-        stored_path = './img/' + filename
+        stored_path = '/home/ec2-user/app/images/' + filename
         img_data = base64.b64decode(img_binary_string)
 
         f = open(stored_path, 'wb')
